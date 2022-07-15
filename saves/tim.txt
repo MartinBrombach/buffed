@@ -1,0 +1,5 @@
+health:100
+strength:5
+agility:1
+inteligence:5
+luck:0
