@@ -99,15 +99,15 @@ def newGame():
             print('\033[1A', end='\x1b[2K')
             print('\033[1;31mThat name is allready taken, try again.')
             print('\033[1;33mNow type the name of your character: ')
-    # Add creating of savefile HERE
-    # Add creating of savefile HERE
-    # Add creating of savefile HERE
-    # Add creating of savefile HERE
-    # Add creating of savefile HERE
-    # Add creating of savefile HERE
+    atb = attributes()
+    with open(f'{name}.txt', 'w') as create:
+        create.write(f'health:{atb.health}\n')
+        create.write(f'strength:{atb.strength}\n')
+        create.write(f'agility:{atb.agility}\n')
+        create.write(f'inteligence:{atb.inteligence}\n')
+        create.write(f'luck:{atb.luck}')
     os.system('CLS')
     typing(f'Your name is {name}, and you are verry weak.', '\033[1;37m')
-    atb = attributes()
     sleep(1)
     print()
     typing('This is your stats:', '\033[1;37m')
