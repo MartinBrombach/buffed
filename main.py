@@ -1,6 +1,7 @@
 import os
 import keyboard
 from time import sleep
+from threading import Thread
 
 #Clearing the terminal to make it look better
 os.system('CLS')
@@ -55,7 +56,6 @@ def multipleChoice(ar):
         elif keyboard.is_pressed('right'):
             for removes in range(len(ar)+2):
                 print('\033[1A', end='\x1b[2K')
-            print('You chose '+ar[temp])
             return ar[temp]
             break
 
@@ -85,8 +85,7 @@ def newGame():
             print('')
             print(f'\033[1;37mAre you sure you want to name your character {name}?')
             tempArr=['Yes', 'No']
-            if multipleChoice(tempArr) == 'Yes':
-                os.chdir('../')
+            if multipleChoice(tempArr) == tempArr[0]:
                 break
             else:
                 for i in range(4):
@@ -106,6 +105,7 @@ def newGame():
         create.write(f'agility:{atb.agility}\n')
         create.write(f'inteligence:{atb.inteligence}\n')
         create.write(f'luck:{atb.luck}')
+    os.chdir('../')
     os.system('CLS')
     typing(f'Your name is {name}, and you are verry weak.', '\033[1;37m')
     sleep(1)
@@ -131,15 +131,41 @@ def newGame():
         if keyboard.is_pressed('right'):
             break
 
+#All the different choices from tavern
+def fight():
+    while True:
+        os.system('CLS')
+        fightArr = ['Fight', 'Info', 'Back to tavern']
+        choice = multipleChoice(fightArr)
+        if choice == fightArr[0]:
+            print('Fight')
+        elif choice == fightArr[1]:
+            print('Info')
+        elif choice == fightArr[2]:
+            break
+
+
 #The game
 def game(newOrOld):
     os.system('CLS')
     if newOrOld=='new':
         newGame()
     atb = attributes()
-    os.system('CLS')
-    print('\033[1;37mGame start')
-
+    while True:
+        os.system('CLS')
+        print('\033[1;37mWelcome to the tavern. Choose your activity')
+        activity = ['Fight', 'Train', 'Settings', 'Save', 'Exit']
+        selected = multipleChoice(activity)
+        if selected == activity[0]:
+            fight()
+        elif selected == activity[1]:
+            print('Train')
+        elif selected == activity[2]:
+            print('Settings')
+        elif selected == activity[3]:
+            print('Save')
+        elif selected == activity[4]:
+            os.system('CLS')
 #If continue is chosen this loads the save
 def loadGame(saveGame):
     with open(saveGame+'.txt', 'r') as save:
@@ -158,13 +184,13 @@ def findSave():
         saves = saves.replace('.txt', '')
         savesArr.append(saves)
     sleep(.5)
-    print('')
     while True:
         print('Choose your save')
         temp = multipleChoice(savesArr)
+        print('\033[1A', end='\x1b[2K')
         loadGame(temp)
         atb = attributes()
-        print('')
+        print(f'You chose {temp}, this is the stats:')
         print('\033[1;32mHealth: ', atb.health)
         print('\033[1;31mStrength: ', atb.strength)
         print('\033[1;34mAgility: ', atb.agility)
@@ -172,12 +198,11 @@ def findSave():
         print('\033[1;35mLuck: ', atb.luck)
         print('\033[1;37m')
         conf = multipleChoice(['Confirm', 'Re select'])
-        if conf=='Confirm':
+        if conf == conf[0]:
             break
         else:
-            for i in range(11):
+            for i in range(7):
                 print('\033[1A', end='\x1b[2K')
-            print('')
     os.chdir('../')
     game('old')
 
@@ -185,7 +210,7 @@ def findSave():
 #Checking if new game or continue game
 startAr = ['New game', 'Continue']
 startGame = multipleChoice(startAr)
-if startGame == 'Continue':
+if startGame == startAr[1]:
     findSave()
-elif startGame == 'New game':
+elif startGame == startAr[0]:
     game('new')
